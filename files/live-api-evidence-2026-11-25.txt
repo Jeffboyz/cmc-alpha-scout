@@ -1,0 +1,178 @@
+CMC ALPHA SCOUT — LIVE API EVIDENCE FOR DORAHACKS SUBMISSION
+Project: https://github.com/Jeffboyz/cmc-alpha-scout
+Assembled (WIB): 2026-11-25 07:33:55 WIB
+All calls hit the real CoinMarketCap Pro API (pro-api.coinmarketcap.com).
+Auth: credential injected by the Muse custom.coinmarketcap connector proxy
+(header X-CMC_PRO_API_KEY); the key value never appears in this transcript.
+
+===== 1) API key info: GET /v1/key/info =====
+{
+  "data": {
+    "plan": {
+      "credit_limit_monthly": 15000,
+      "credit_limit_monthly_reset": "In 5 days, 23 hours, 26 minutes",
+      "credit_limit_monthly_reset_timestamp": "2026-12-01T00:00:00.000Z",
+      "rate_limit_minute": 50
+    },
+    "usage": {
+      "current_minute": {
+        "requests_made": 1,
+        "requests_left": 49
+      },
+      "current_day": {
+        "credits_used": 0
+      },
+      "current_month": {
+        "credits_used": 0,
+        "credits_left": 15000
+      }
+    }
+  },
+  "status": {
+    "timestamp": "2026-11-25T00:33:13.038Z",
+    "error_code": 0,
+    "error_message": null,
+    "elapsed": 7,
+    "credit_count": 0,
+    "notice": null
+  }
+}
+
+===== 2) Raw status check: GET /v1/global-metrics/quotes/latest (convert=USD) =====
+{
+  "data": {
+    "quote": {
+      "USD": {
+        "total_market_cap": 2043449479555.7446,
+        "total_volume_24h": 73305862638.53,
+        "total_volume_24h_reported": 579236083432.14,
+        "altcoin_volume_24h": 40724335517.411224,
+        "altcoin_volume_24h_reported": 378640696824.35724,
+        "altcoin_market_cap": 846293519309.9185,
+        "defi_volume_24h": 9937535276.27952,
+        "defi_market_cap": 58889242920.348946,
+        "defi_volume_24h_reported": 211049627529.4355,
+        "defi_24h_percentage_change": -23.8392915713,
+        "stablecoin_volume_24h": 76287048754.08386,
+        "stablecoin_volume_24h_reported": 564922474865.8248,
+        "stablecoin_market_cap": 268072263967.6486,
+        "stablecoin_24h_percentage_change": -25.2038108101,
+        "derivatives_volume_24h": 780935569242.1543,
+        "derivatives_volume_24h_reported": 818402582654.0618,
+        "derivatives_24h_percentage_change": -19.6044088079,
+        "total_market_cap_yesterday": 2090623190668.7852,
+        "total_volume_24h_yesterday": 98910885540.17,
+        "total_market_cap_yesterday_percentage_change": -2.25644254,
+        "total_volume_24h_yesterday_percentage_change": -25.88696154,
+        "last_updated": "2026-11-25T00:31:59.999Z"
+      }
+    },
+    "btc_dominance": 58.585052981398,
+    "eth_dominance": 9.988865950752,
+===== 3) Full app run: python3 -m cmc_alpha_scout all (LIVE via proxy) =====
+Run at (WIB): 2026-11-25 07:33:16 WIB
+[cmc] trending unavailable: CMC API error (proxy): HTTP 403 {"status":{"timestamp":"2026-11-25T00:33:19.760Z","error_code":1006,"error_message":"Your API Key subscription plan doesn't support this endpoint.","elapsed":0,"credit_count":0,"notice":null}}
+LIVE MODE — CoinMarketCap API
+=== DAILY MARKET SUMMARY ===
+Total market cap : $2,043,449,479,556 (-2.26% vs yesterday)
+Total volume 24h : $73,305,862,639
+BTC dominance    : 58.6%
+ETH dominance    : 10.0%
+Active cryptos   : 7,856
+Fear & Greed     : n/a (index unavailable on this plan)
+
+LIVE MODE — CoinMarketCap API
+=== TOP GAINERS 24h ===
+  #343  ELF    $     0.05251  24h +33.66%  7d +30.97%  vol24h $45,066,239
+  #443  WAVES  $      0.2075  24h +19.09%  7d +23.06%  vol24h $12,916,897
+  #256  PROS   $      0.6843  24h +16.77%  7d +27.68%  vol24h $41,178,659
+  #434  CSPR   $    0.001688  24h  +6.65%  7d  +4.45%  vol24h $2,403,288
+  #103  LUNC   $   4.391e-05  24h  +4.24%  7d  +9.91%  vol24h $21,515,527
+=== TOP LOSERS 24h ===
+  #104  MON    $    0.009308  24h -19.00%  7d -39.04%  vol24h $89,483,375
+  #297  0G     $     0.09247  24h -13.61%  7d -28.33%  vol24h $128,216,221
+  #314  PEAQ   $     0.01951  24h -11.76%  7d -22.09%  vol24h $1,608,533
+  #483  CFG    $     0.04484  24h  -7.70%  7d -40.41%  vol24h $6,407,996
+  #136  AKT    $      0.4627  24h  -7.22%  7d  -9.63%  vol24h $2,994,874
+
+LIVE MODE — CoinMarketCap API
+Alerts: 20 triggered
+[ALERT 2026-11-25 00:33 UTC] XLM price_move_24h: -5.68% in 24h at $0.12 (vol24h $122,278,442)
+[ALERT 2026-11-25 00:33 UTC] CC price_move_24h: -5.95% in 24h at $0.07 (vol24h $17,087,865)
+[ALERT 2026-11-25 00:33 UTC] GRAM price_move_24h: -6.96% in 24h at $0.92 (vol24h $49,290,172)
+[ALERT 2026-11-25 00:33 UTC] APT price_move_24h: -5.70% in 24h at $0.36 (vol24h $25,369,365)
+[ALERT 2026-11-25 00:33 UTC] MON price_move_24h: -19.00% in 24h at $0.01 (vol24h $89,483,375)
+[ALERT 2026-11-25 00:33 UTC] AR price_move_24h: -6.08% in 24h at $2.27 (vol24h $7,683,672)
+[ALERT 2026-11-25 00:33 UTC] AKT price_move_24h: -7.22% in 24h at $0.46 (vol24h $2,994,874)
+[ALERT 2026-11-25 00:33 UTC] AIOZ price_move_24h: -5.21% in 24h at $0.07 (vol24h $1,433,161)
+[ALERT 2026-11-25 00:33 UTC] PROS price_move_24h: +16.77% in 24h at $0.68 (vol24h $41,178,659)
+[ALERT 2026-11-25 00:33 UTC] 0G price_move_24h: -13.66% in 24h at $0.09 (vol24h $128,382,519)
+[ALERT 2026-11-25 00:33 UTC] KNTQ price_move_24h: -6.71% in 24h at $0.16 (vol24h $2,423,375)
+[ALERT 2026-11-25 00:33 UTC] PEAQ price_move_24h: -11.76% in 24h at $0.02 (vol24h $1,608,533)
+[ALERT 2026-11-25 00:33 UTC] MEGA price_move_24h: -6.25% in 24h at $0.04 (vol24h $7,287,509)
+[ALERT 2026-11-25 00:33 UTC] ELF price_move_24h: +35.18% in 24h at $0.05 (vol24h $45,102,165)
+[ALERT 2026-11-25 00:33 UTC] HNT price_move_24h: -5.84% in 24h at $0.21 (vol24h $1,892,776)
+[ALERT 2026-11-25 00:33 UTC] CCD price_move_24h: -5.84% in 24h at $0.00 (vol24h $212,235)
+[ALERT 2026-11-25 00:33 UTC] LSK price_move_24h: -5.02% in 24h at $0.15 (vol24h $9,097,854)
+[ALERT 2026-11-25 00:33 UTC] CSPR price_move_24h: +6.65% in 24h at $0.00 (vol24h $2,400,977)
+[ALERT 2026-11-25 00:33 UTC] WAVES price_move_24h: +19.09% in 24h at $0.21 (vol24h $12,916,897)
+[ALERT 2026-11-25 00:33 UTC] CFG price_move_24h: -7.70% in 24h at $0.04 (vol24h $6,407,996)
+exit_code=0
+Run finished (WIB): 2026-11-25 07:33:20 WIB
+===== 4) Endpoint checks for submission notes =====
+-- GET /v1/cryptocurrency/quotes/latest?symbol=BTC,ETH (head) --
+{
+  "data": {
+    "BTC": {
+      "tags": [
+        "mineable",
+        "pow",
+        "sha-256",
+        "store-of-value",
+        "state-channel",
+        "coinbase-ventures-portfolio",
+        "three-arrows-capital-portfolio",
+        "polychain-capital-portfolio",
+        "binance-labs-portfolio",
+        "blockchain-capital-portfolio",
+        "boostvc-portfolio",
+        "cms-holdings-portfolio",
+        "dcg-portfolio",
+        "dragonfly-capital-portfolio",
+        "electric-capital-portfolio",
+        "fabric-ventures-portfolio",
+        "framework-ventures-portfolio",
+        "galaxy-digital-portfolio",
+        "huobi-capital-portfolio",
+        "alameda-research-portfolio",
+        "a16z-portfolio",
+-- GET /v3/fear-and-greed/latest --
+{
+  "data": {
+    "value": 8,
+    "update_time": "2026-11-25T00:23:10.022Z",
+    "value_classification": "Extreme fear"
+  },
+  "status": {
+    "timestamp": "2026-11-25T00:33:27.310Z",
+    "error_code": "0",
+    "error_message": "",
+    "elapsed": 4,
+    "credit_count": 1
+  }
+}
+-- GET /v1/cryptocurrency/trending/latest --
+HTTP 403: {"status":{"timestamp":"2026-11-25T00:33:27.828Z","error_code":1006,"error_message":"Your API Key subscription plan doesn't support this endpoint.","elapsed":1,"credit_count":0,"notice":null}}
+Checks finished (WIB): 2026-11-25 07:33:26 WIB
+===== 5) Re-run after error_code normalisation fix: summary (LIVE via proxy) =====
+Run at (WIB): 2026-11-25 07:33:35 WIB
+[cmc] trending unavailable: CMC API error (proxy): HTTP 403 {"status":{"timestamp":"2026-11-25T00:33:38.172Z","error_code":1006,"error_message":"Your API Key subscription plan doesn't support this endpoint.","elapsed":0,"credit_count":0,"notice":null}}
+LIVE MODE — CoinMarketCap API
+=== DAILY MARKET SUMMARY ===
+Total market cap : $2,043,449,479,556 (-2.26% vs yesterday)
+Total volume 24h : $73,305,862,639
+BTC dominance    : 58.6%
+ETH dominance    : 10.0%
+Active cryptos   : 7,856
+Fear & Greed     : 8 (Extreme fear)
+exit_code=0
