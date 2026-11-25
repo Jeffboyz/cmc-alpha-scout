@@ -34,6 +34,60 @@ API evidence for the submission: run any command in live mode — the client
 calls the endpoints above with the `X-CMC_PRO_API_KEY` header; a screen
 recording of a live run will be attached to the DoraHacks submission.
 
+## Live API evidence (verified 25 Nov 2026)
+
+A full live run was executed against the real CoinMarketCap Pro API on
+25 Nov 2026 (~00:33 UTC) and the complete transcript is committed at
+[`files/live-api-evidence-2026-11-25.txt`](files/live-api-evidence-2026-11-25.txt).
+Highlights from that run (all responses `error_code: 0` unless noted):
+
+- `GET /v1/key/info` — key valid, plan credit limit 15,000/month.
+- `GET /v1/global-metrics/quotes/latest` — total market cap
+  $2,043,449,479,556, BTC dominance 58.6%, data timestamped seconds earlier.
+- `GET /v1/cryptocurrency/listings/latest` — screener ranked the top 100;
+  top gainer ELF +33.66% (24h), top loser MON −19.00% (24h).
+- `GET /v1/cryptocurrency/quotes/latest?symbol=BTC,ETH` — live quotes OK.
+- `GET /v3/fear-and-greed/latest` — value **8, "Extreme fear"**.
+- Alerts fired on real moves (e.g. 0G −13.6% in 24h on $128M volume).
+- `GET /v1/cryptocurrency/trending/latest` — returned HTTP 403
+  (error 1006, "plan doesn't support this endpoint") on this plan; the app
+  degrades gracefully and the summary simply omits trending coins.
+
+## Notes on the CoinMarketCap API (strengths & limits)
+
+**Strengths**
+
+- One `listings/latest` call returns rank, price, 24h/7d change and volume
+  for 100 assets — enough to power a screener, quotes view and alert engine
+  from a single credit-efficient request.
+- `global-metrics` gives market cap, volume and dominance in one call, and
+  the v3 Fear & Greed endpoint adds a sentiment signal most APIs don't have.
+- Consistent `status` envelope (`error_code`, `credit_count`, timestamps)
+  makes error handling and credit budgeting straightforward.
+
+**Limits found while building**
+
+- Endpoint access is plan-gated in ways that only surface at call time:
+  `trending/latest` returns HTTP 403 / error 1006 on this plan, so
+  optional features must be coded to degrade gracefully.
+- `error_code` is an integer on most endpoints but a **string** (`"0"`) on
+  the v3 Fear & Greed endpoint — clients must normalise before testing it
+  (Alpha Scout does; see `_status_is_error` in `client.py`).
+- Data freshness is excellent (seconds), but every call costs credits, so
+  batch endpoints (`listings`, `quotes` with multiple symbols) are strongly
+  preferable to per-coin polling.
+
+## Alternative auth: Muse connector proxy transport
+
+In Muse-connected environments the app can run without a local key:
+set `CMC_TRANSPORT=proxy` and requests are sent via `urllib` with the
+credential injected by the Muse custom-connector proxy
+(`dynamic_credentials.add_surrogate_to_request`, connector
+`custom.coinmarketcap`, host `pro-api.coinmarketcap.com`). The key is never
+visible to the app or the user in that mode. This is optional and additive —
+the default transport remains the plain `X-CMC_PRO_API_KEY` header described
+above, unchanged for judges and other users.
+
 ## Stack decision
 
 **Python 3 + `requests` only.** Rationale: the whole product is API
@@ -53,6 +107,9 @@ PYTHONPATH=src python3 -m cmc_alpha_scout --demo all
 # Startup tier during the event, no card):
 export CMC_API_KEY=<your key>        # or copy .env.example to .env
 PYTHONPATH=src python3 -m cmc_alpha_scout all
+
+# Live mode via Muse connector proxy (no local key; optional):
+CMC_TRANSPORT=proxy PYTHONPATH=src python3 -m cmc_alpha_scout all
 ```
 
 If `CMC_API_KEY` is unset, the tool automatically falls back to demo mode
@@ -97,6 +154,8 @@ CMC endpoints used + proof of real API calls.
 
 ## Status
 
-v0.1.0 scaffold — all three core features implemented and verified
-offline in demo mode. Live mode is code-complete; it activates as soon as
-a `CMC_API_KEY` is provided.
+v0.2.0 — all three core features implemented and verified offline in demo
+mode, and **verified live against the real CoinMarketCap Pro API on
+25 Nov 2026** (full transcript in `files/live-api-evidence-2026-11-25.txt`).
+An optional proxy transport (`CMC_TRANSPORT=proxy`) supports Muse
+connector environments; the default API-key transport is unchanged.
